@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import authService from '../../services/authService';
 
-const Register = () => {
+const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    name: '',
     email: '',
     password: ''
   });
@@ -15,7 +14,6 @@ const Register = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    // Clear error when user starts typing
     if (error) setError('');
   };
 
@@ -25,28 +23,26 @@ const Register = () => {
     setError('');
     
     try {
-      // Call the registration API
-      const response = await authService.register(formData);
+      const response = await authService.login(formData);
       
       if (response.data?.success && response.data?.data) {
         const { accessToken, refreshToken, user } = response.data.data;
         
-        // Store auth tokens and user payload
         if (accessToken) localStorage.setItem('accessToken', accessToken);
         if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
         if (user) localStorage.setItem('user', JSON.stringify(user));
+      } else if (response.data?.token) {
+        localStorage.setItem('token', response.data.token);
       }
       
-      // Redirect to login or home dashboard depending on your app flow
-      navigate('/login');
+      // Redirect to home dashboard
+      navigate('/');
     } catch (err) {
-      console.error('Registration failed:', err);
-      
-      // Try to extract the error message from the API response
+      console.error('Login failed:', err);
       const errorMessage = err.response?.data?.message 
         || err.response?.data?.error 
         || err.message 
-        || 'Registration failed. Please try again.';
+        || 'Login failed. Please try again.';
         
       setError(errorMessage);
     } finally {
@@ -66,7 +62,7 @@ const Register = () => {
             </div>
 
             <h1 className="text-4xl lg:text-5xl xl:text-6xl font-black font-headline tracking-tighter leading-[1] text-on-surface">
-              Join the <br /><span className="text-primary">Action.</span>
+              Welcome <br /><span className="text-primary">Back.</span>
             </h1>
 
             <p className="text-base lg:text-lg text-on-surface-variant max-w-md leading-relaxed">
@@ -96,14 +92,14 @@ const Register = () => {
                 <div className="text-primary mb-2">
                   <span className="material-symbols-outlined text-4xl" data-icon="account_balance">account_balance</span>
                 </div>
-                <h2 className="text-3xl font-black font-headline tracking-tight text-on-surface">Join the Action.</h2>
+                <h2 className="text-3xl font-black font-headline tracking-tight text-on-surface">Welcome Back.</h2>
               </div>
 
               <div className="space-y-4">
                 {/* Header */}
                 <div className="hidden md:block mb-4">
-                  <h3 className="text-lg lg:text-xl font-bold font-headline text-on-surface">Create your account</h3>
-                  <p className="text-on-surface-variant text-xs lg:text-sm mt-0.5">Start your civic journey today.</p>
+                  <h3 className="text-lg lg:text-xl font-bold font-headline text-on-surface">Log in to your account</h3>
+                  <p className="text-on-surface-variant text-xs lg:text-sm mt-0.5">Resume your civic journey.</p>
                 </div>
 
                 {/* Form */}
@@ -113,19 +109,6 @@ const Register = () => {
                       <p className="text-red-500 text-xs font-medium">{error}</p>
                     </div>
                   )}
-                  
-                  <div className="space-y-0.5 lg:space-y-1">
-                    <label className="text-[10px] lg:text-xs font-bold font-headline uppercase tracking-wider text-on-surface-variant ml-1">Full Name</label>
-                    <input 
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      className="w-full px-3 lg:px-4 py-2.5 lg:py-3 bg-surface-container-low border-none rounded-lg focus:ring-2 focus:ring-primary-container focus:bg-surface-container-highest transition-all text-on-surface placeholder:text-zinc-400 text-sm" 
-                      placeholder="Jane Doe" 
-                      type="text" 
-                      required
-                    />
-                  </div>
                   
                   <div className="space-y-0.5 lg:space-y-1">
                     <label className="text-[10px] lg:text-xs font-bold font-headline uppercase tracking-wider text-on-surface-variant ml-1">Email Address</label>
@@ -150,8 +133,13 @@ const Register = () => {
                       placeholder="••••••••" 
                       type="password" 
                       required
-                      minLength={8}
                     />
+                  </div>
+
+                  <div className="flex justify-end pt-1">
+                    <a className="text-[10px] lg:text-xs text-primary font-bold hover:underline" href="/forgot-password">
+                      Forgot Password?
+                    </a>
                   </div>
 
                   <button 
@@ -162,7 +150,7 @@ const Register = () => {
                     {isLoading ? (
                       <span className="material-symbols-outlined animate-spin text-xl">progress_activity</span>
                     ) : (
-                      "Create Account"
+                      "Log In"
                     )}
                   </button>
                 </form>
@@ -188,15 +176,15 @@ const Register = () => {
 
                 {/* Footer Link */}
                 <p className="text-center text-xs lg:text-sm text-on-surface-variant mt-2 lg:mt-4">
-                  Already have an account?{' '}
-                  <a className="text-primary font-bold hover:underline" href="/login">Log in</a>
+                  Don't have an account?{' '}
+                  <a className="text-primary font-bold hover:underline" href="/register">Register</a>
                 </p>
               </div>
             </div>
 
             {/* Terms Disclaimer */}
             <p className="text-[9px] lg:text-[10px] text-zinc-400 text-center mt-3 lg:mt-4 px-4 lg:px-6 leading-relaxed">
-              By joining, you agree to the Civic Modern Terms of Service and Privacy Policy. Data-driven governance requires your informed consent.
+              By logging in, you agree to the Civic Modern Terms of Service and Privacy Policy.
             </p>
           </div>
         </div>
@@ -209,4 +197,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;
