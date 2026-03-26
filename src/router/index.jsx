@@ -4,6 +4,7 @@ import Home from '@/pages/Home/Home';
 import NotFound from '@/pages/NotFound/NotFound';
 import Register from '@/pages/Register/Register';
 import Login from '@/pages/Login/Login';
+import Report from '@/pages/Report/Report';
 
 /**
  * Centralized route definitions
@@ -15,6 +16,7 @@ const router = createBrowserRouter([
     element: <MainLayout />,
     children: [
       { index: true, element: <Home /> },
+      { path: 'report', element: <Report /> },
 
       // ── Add more routes here ──────────────────────────
       // { path: 'dashboard', element: <Dashboard /> },

@@ -191,3 +191,15 @@ img {
   -webkit-backdrop-filter: blur(20px);
 }
 
+/* ─── Map Dashboard Custom Elements ──────────────────────── */
+.heatmap-glow {
+  filter: blur(40px);
+  opacity: 0.6;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

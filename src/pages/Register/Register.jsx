@@ -37,8 +37,8 @@ const Register = () => {
         if (user) localStorage.setItem('user', JSON.stringify(user));
       }
       
-      // Redirect to login or home dashboard depending on your app flow
-      navigate('/login');
+      // Redirect to home dashboard depending on your app flow
+      navigate('/');
     } catch (err) {
       console.error('Registration failed:', err);
       
