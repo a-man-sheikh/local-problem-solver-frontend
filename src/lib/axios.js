@@ -14,10 +14,13 @@ const api = axios.create({
   },
 });
 
+const getStoredToken = () =>
+  localStorage.getItem('token') || localStorage.getItem('accessToken');
+
 // ── Request Interceptor ─────────────────────────────────────
 api.interceptors.request.use(
   (requestConfig) => {
-    const token = localStorage.getItem('token');
+    const token = getStoredToken();
     if (token) {
       requestConfig.headers.Authorization = `Bearer ${token}`;
     }
@@ -34,6 +37,8 @@ api.interceptors.response.use(
 
     if (response?.status === 401) {
       localStorage.removeItem('token');
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
       window.location.href = '/login';
     }
 

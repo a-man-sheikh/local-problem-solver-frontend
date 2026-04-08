@@ -1,0 +1,197 @@
+/* ════════════════════════════════════════════════════════════════════
+ * LocationPicker — Scoped styles
+ * Follows the project's Material 3 design token system.
+ * ════════════════════════════════════════════════════════════════════ */
+
+.location-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+/* ─── Map Wrapper ───────────────────────────────────────────────── */
+.location-picker__map-wrapper {
+  position: relative;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 2px solid var(--color-border, #e4beb4);
+  background: #f0edec;
+  height: 220px;
+  transition: border-color 0.25s ease;
+}
+
+.location-picker__map-wrapper:hover {
+  border-color: #ff5722;
+}
+
+.location-picker__map {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* ─── Override Leaflet's z-index so it doesn't clash with app chrome ─ */
+.location-picker__map .leaflet-pane {
+  z-index: 1;
+}
+.location-picker__map .leaflet-top,
+.location-picker__map .leaflet-bottom {
+  z-index: 2;
+}
+
+/* ─── Tap Hint Overlay ──────────────────────────────────────────── */
+.location-picker__hint {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  pointer-events: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #5b4039;
+  background: rgba(252, 249, 248, 0.55);
+  backdrop-filter: blur(2px);
+  animation: location-picker-fade-in 0.4s ease;
+}
+
+.location-picker__hint-icon {
+  font-size: 2rem;
+  color: #ff5722;
+  animation: location-picker-bounce 1.8s ease-in-out infinite;
+}
+
+/* ─── Geolocation Loading Overlay ───────────────────────────────── */
+.location-picker__loading-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: rgba(252, 249, 248, 0.8);
+  backdrop-filter: blur(6px);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #b02f00;
+}
+
+/* ─── Controls Bar ──────────────────────────────────────────────── */
+.location-picker__controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.location-picker__my-location-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #b02f00;
+  background: #ffdbd1;
+  border: none;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.location-picker__my-location-btn:hover:not(:disabled) {
+  background: #ffb5a0;
+  transform: scale(1.01);
+}
+
+.location-picker__my-location-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.location-picker__my-location-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.location-picker__clear-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  background: #ebe7e7;
+  border: none;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  color: #5b4039;
+  transition: all 0.2s ease;
+}
+
+.location-picker__clear-btn:hover {
+  background: #dcd9d9;
+  color: #b02f00;
+}
+
+.location-picker__clear-btn:active {
+  transform: scale(0.92);
+}
+
+/* ─── Coordinates Display ───────────────────────────────────────── */
+.location-picker__coords {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  background: #f6f3f2;
+  border-radius: 0.5rem;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.7rem;
+  color: #5b4039;
+  letter-spacing: 0.02em;
+}
+
+/* ─── Error Message ─────────────────────────────────────────────── */
+.location-picker__error {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  background: #ffdad6;
+  border-radius: 0.5rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #93000a;
+}
+
+/* ─── Animations ────────────────────────────────────────────────── */
+@keyframes location-picker-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes location-picker-bounce {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+
+/* ─── Responsive ────────────────────────────────────────────────── */
+@media (min-width: 768px) {
+  .location-picker__map-wrapper {
+    height: 280px;
+  }
+}
